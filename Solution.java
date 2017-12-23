@@ -5,138 +5,203 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+/**
+ * 
+ */
 
+/**
+ * @author Narimene MEZINE
+ *
+ */
 public class Solution {
 
-	public static Map<Double, Integer> StockPieces;
+	public static Map<Double, Integer> StockCoins;
 	public static List<Double> rendus;
-	public static List<Double> expectedPiece;
+	public static List<Double> expectedCoin;
 
-	
-	public static void initStockePieces() {
-		expectedPiece = initExpectedPieceType();
-		StockPieces = new HashMap<Double, Integer>();
 
-		for (double typePiece : expectedPiece) {
-			getStockPieces().put(typePiece, 0);
+	/**
+	 *  init the list of coins have to return
+	 */
+	public static void initListCoinsToReturn() {
+		rendus = new ArrayList<Double>();
+	}
+
+	/**
+	 * @return List<Double> : return a list of all monnaie type accepted
+	 */
+	public static List<Double> initExpectedCoinType()
+	{
+		expectedCoin = new ArrayList<Double>();
+		expectedCoin.add(5.0);
+		expectedCoin.add(2.0);
+		expectedCoin.add(1.0);
+		expectedCoin.add(0.5);
+		expectedCoin.add(0.2);
+		expectedCoin.add(0.1);
+		expectedCoin.add(0.05);
+
+		return expectedCoin;
+	}
+
+	/**
+	 * init the stock
+	 */
+	public static void initStockCoins() {
+		expectedCoin = initExpectedCoinType();
+		StockCoins = new HashMap<Double, Integer>();
+
+		for (double typeCoin : expectedCoin) {
+			getStockCoins().put(typeCoin, 15);
 		}
 	}
 
-	public static Map<Double, Integer> getStockPieces() {
-		return StockPieces;
+	/**
+	 * @return Map<Double, Integer> : return all stock
+	 */
+	public static Map<Double, Integer> getStockCoins() {
+		return StockCoins;
 	}
 
-	public void setStockPieces(Map<Double, Integer> stockPieces) {
-		StockPieces = stockPieces;
+	/**
+	 * @param stockCoins
+	 */
+	public void setStockCoins(Map<Double, Integer> stockCoins) {
+		StockCoins = stockCoins;
 	}
 
-	public static int getNbPieceOfType(List<Double> inputPieces, double typePiece) {
-		int nbPieceOfType = 0;
+	/**
+	 * @param inputCoins
+	 * @param typeCoin
+	 * @return int : return nb of coin of different type
+	 */
+	public static int getNbCoinOfType(List<Double> inputCoins, double typeCoin) {
+		int nbCoinOfType = 0;
 
-		for (double piece : inputPieces) {
-			if (piece == typePiece) {
-				nbPieceOfType++;
+		for (double coin : inputCoins) {
+			if (coin == typeCoin) {
+				nbCoinOfType++;
 			}
 		}
-		return nbPieceOfType;
+		return nbCoinOfType;
 	}
-	
-	public static List<Double> getTypeMonnaie(List<Double> inputPieces) {
+
+	/**
+	 * @param inputCoins
+	 * @return List<Double> : return a list of distinct monnaie type
+	 */
+	public static List<Double> getTypeMonnaie(List<Double> inputCoins) {
 		List<Double> listTypeMonnaie = new ArrayList<Double>();
-		double previousPiece = 0;
-		
-		for (double piece : inputPieces) {
-			if(previousPiece != piece) {
-				listTypeMonnaie.add(piece);
+
+		for (double coin : inputCoins) {
+			if(!listTypeMonnaie.contains(coin)) {
+				listTypeMonnaie.add(coin);
 			}
-			previousPiece = piece;
 		}
 		return listTypeMonnaie;
 	}
 
-	public static int addInStock(List<Double> inputPieces) {
+	/**
+	 * @param inputCoins
+	 * @return int : 0 if OK, -1 if the stock of any CoinType is full (NOK)
+	 */
+	public static int addInStock(List<Double> inputCoins) {
 		int newStock = 0;
 
-		for (double piece : getTypeMonnaie(inputPieces)) {
-			int nbPieceOfThisType = getNbPieceOfType(inputPieces, piece);
-			if ((StockPieces.get(piece) + nbPieceOfThisType) < 20) {
-				newStock = (StockPieces.get(piece) + nbPieceOfThisType);
-				StockPieces.put(piece, newStock);
+		for (double coin : getTypeMonnaie(inputCoins)) {
+			int nbCoinOfThisType = getNbCoinOfType(inputCoins, coin);
+			if ((StockCoins.get(coin) + nbCoinOfThisType) < 20) {
+				newStock = (StockCoins.get(coin) + nbCoinOfThisType);
+				StockCoins.put(coin, newStock);
 			} else {
-				System.out.println("Veuillez inserer un nombre de piece de "+piece+"CHF moins important");
+				System.out.println("Veuillez inserer un nombre de coin de "+coin+"CHF moins important");
 				return -1;
 			}
 		}
 		return 0;
 	}
 
-	public static void removeInStock(Double piece) {
-		if (StockPieces.get(piece) > 0) {
-			int newStock = StockPieces.get(piece) - 1;
-			StockPieces.put(piece, newStock);
+	/**
+	 * @param coin
+	 * remove the coin from the stock
+	 */
+	public static void removeCoinFromStock(Double coin) {
+		if (StockCoins.get(coin) > 0) {
+			int newStock = StockCoins.get(coin) - 1;
+			StockCoins.put(coin, newStock);
 		} else {
-			System.out.println("La machine n'a pas assez de pieces de : " + piece);
+			System.out.println("La machine n'a pas assez de pieces de : " + coin);
 		}
 	}
 
-	public static void removeInStock(List<Double> inputPieces) {
-		for(double piece : inputPieces) {
-			int newStock = StockPieces.get(piece) - 1;
-			StockPieces.put(piece, newStock);
+	/**
+	 * @param inputCoins
+	 * remove the list of coin from the stock
+	 */
+	public static void removeInStock(List<Double> inputCoins) {
+		for(double coin : inputCoins) {
+			int newStock = StockCoins.get(coin) - 1;
+			StockCoins.put(coin, newStock);
 		}
 	}
 
-	public static double getSomme(List<Double> inputPieces) {
+	/**
+	 * @param inputCoins
+	 * @return the somme of input coins
+	 */
+	public static double getSomme(List<Double> inputCoins) {
 		double somme = 0;
-		for (double piece : inputPieces) {
-			somme = somme + piece;
+		for (double coin : inputCoins) {
+			somme = somme + coin;
 		}
 		return round(somme, 2);
 	}
-	
-	public static List<Double> initExpectedPieceType()
-	{
-		expectedPiece = new ArrayList<Double>();
-		expectedPiece.add(5.0);
-		expectedPiece.add(2.0);
-		expectedPiece.add(1.0);
-		expectedPiece.add(0.5);
-		expectedPiece.add(0.2);
-		expectedPiece.add(0.1);
-		expectedPiece.add(0.05);
-		
-		return expectedPiece;
-	}
-	
-	public static boolean isValidPieces(List<Double> inputPieces) {
-		
-		for(double piece : inputPieces) {
-			if(!expectedPiece.contains(piece)) {
-				System.out.println("Merci d'inserer seulement les piéces accepter par la machine");
+
+
+
+	/**
+	 * @param inputCoins
+	 * @return boolean : true if all input coins are accepted, false if not
+	 */
+	public static boolean isValidCoins(List<Double> inputCoins) {
+
+		for(double coin : inputCoins) {
+			if(!expectedCoin.contains(coin)) {
+				System.out.println("Merci d'inserer seulement les piéces accepté par la machine");
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public static List<Double> renduMonnnaie(List<Double> inputPieces, double montantAchat) {
-		
-		if(isValidPieces(inputPieces)) {
-			double montantInput = getSomme(inputPieces);
-	
+	/**
+	 * @param inputCoins
+	 * @param montantAchat
+	 * @return List<Double> : return coins if all is ok, null if not
+	 */
+	public static List<Double> renduMonnnaie(List<Double> inputCoins, double montantAchat) {
+
+		if(isValidCoins(inputCoins)) {
+			double montantInput = getSomme(inputCoins);
+
 			if (montantInput < montantAchat) {
 				System.out.println("Montant inséré insuffisant");
 				return null;
 			} else {
-				if (addInStock(inputPieces) != -1) {
-					return helper(montantAchat, inputPieces);
+				if (addInStock(inputCoins) != -1) {
+					return helper(montantAchat, inputCoins);
 				}
 			}
 		}
 		return null;
 	}
 
-	private static double round(double value, int places) {
+	/**
+	 * @param value
+	 * @param places
+	 * @return double : return round of any number in param
+	 */
+	static double round(double value, int places) {
 		if (places < 0)
 			throw new IllegalArgumentException();
 
@@ -145,37 +210,46 @@ public class Solution {
 
 		return bd.doubleValue();
 	}
-	
-	private static double getRest(Double typePiece, Double resteAPayer) {
-		if ((resteAPayer - typePiece >= 0) 
-				&& (StockPieces.get(typePiece) > 0)) 
+
+	/**
+	 * @param typeCoin
+	 * @param resteAPayer
+	 * @return double : return the rest have to return by the machine
+	 */
+	static double getRest(Double typeCoin, Double resteAPayer) {
+		if ((resteAPayer - typeCoin >= 0) 
+				&& (StockCoins.get(typeCoin) > 0)) 
 		{
-			resteAPayer = round((resteAPayer - typePiece), 2);
-			removeInStock(typePiece);
-			rendus.add(typePiece);
-		return resteAPayer;
+			resteAPayer = round((resteAPayer - typeCoin), 2);
+			removeCoinFromStock(typeCoin);
+			rendus.add(typeCoin);
+			return resteAPayer;
 		}
-		
+
 		return resteAPayer;
 	}
 
-	private static List<Double> helper(double montantAchat, List<Double> inputPieces) {
-		
-		double aRendre = getSomme(inputPieces) - montantAchat;
-		rendus = new ArrayList<Double>();
+	/**
+	 * @param montantAchat
+	 * @param inputCoins
+	 * @return List<Double> : return list of coins have to return if the stock is ok, null if not
+	 */
+	static List<Double> helper(double montantAchat, List<Double> inputCoins) {
+		initListCoinsToReturn();
+		double aRendre = getSomme(inputCoins) - montantAchat;
 
-			for (Double typePiece : StockPieces.keySet()) {
-				while (aRendre > 0 && aRendre >= typePiece && StockPieces.get(typePiece) > 0) {
-				aRendre = getRest(typePiece, aRendre);
-				}
+		for (Double typeCoin : StockCoins.keySet()) {
+			while (aRendre > 0 && aRendre >= typeCoin && StockCoins.get(typeCoin) > 0) {
+				aRendre = getRest(typeCoin, aRendre);
 			}
-			
-			if (aRendre > 0) {
-				System.out.println("La machine n'a pas assez de monnaie");
-				addInStock(rendus);//je remet en stock les pieces que je voulais lui rendre
-				removeInStock(inputPieces); //j'enleve du stocks les pieces qu'il ma donner
-				rendus = inputPieces; //je rend les pieces qu'il ma donner
-			}
+		}
+
+		if (aRendre > 0) { //si apres avoir fait le tour dans mon stock et que je n'ai pas assez de monnaie pour rendre
+			System.out.println("La machine n'a pas assez de monnaie");
+			addInStock(rendus);//je remet en stock les pieces que je voulais lui rendre
+			removeInStock(inputCoins); //j'enleve du stocks les pieces qu'il ma donné
+			rendus = inputCoins; //je rend les pieces qu'il ma donné
+		}
 
 
 		return rendus;
@@ -184,40 +258,6 @@ public class Solution {
 
 	public static void main(String[] args) throws IOException {
 
-		initStockePieces();
-		List<Double> inputPiece = new ArrayList<Double>();
-		double montantAchat;
-		
-		/**
-		 * Exemple 1: Montant inséré insuffisant
-		 */
-		
-		//inputPiece.add(0.10);
-		//montantAchat = 0.80;
-		//System.out.println(renduMonnnaie(inputPiece, montantAchat));
-
-		/**
-		 * Exemple 2: Machine n'ayan pas assez de monnaie
-		 */
-		inputPiece.clear();
-		inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(0.30);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);
-		inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);
-		montantAchat = 1.30;
-		System.out.println(
-				"Montant de l'achat : " + montantAchat + "CHF, Montant inséré " + getSomme(inputPiece) + "CHF");
-		System.out.println("Rendu en piéce de monnaies : "
-				+ renduMonnnaie(inputPiece, montantAchat));
-		
-		/**
-		 * Exemple 3: Montant Ok, rendu monnaie Ok
-		 */
-		//inputPiece.clear();
-		//inputPiece.add(5.0);
-		//montantAchat = 1.10;
-		//System.out.println(
-		//		"Montant de l'achat : " + montantAchat + "CHF, Montant inséré " + getSomme(inputPiece) + "CHF");
-		//System.out.println("Rendu en piéce de monnaies : "
-		//		+ renduMonnnaie(inputPiece, montantAchat));
 
 	}
 
