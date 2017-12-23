@@ -1,3 +1,5 @@
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,7 +30,7 @@ public class Solution {
 	}
 
 	/**
-	 * @return List<Double> : return a list of all monnaie type accepted
+	 * @return List Double : return a list of all monnaie type accepted
 	 */
 	public static List<Double> initExpectedCoinType()
 	{
@@ -57,7 +59,7 @@ public class Solution {
 	}
 
 	/**
-	 * @return Map<Double, Integer> : return all stock
+	 * @return Map of Double and Integer : return all stock
 	 */
 	public static Map<Double, Integer> getStockCoins() {
 		return StockCoins;
@@ -88,7 +90,7 @@ public class Solution {
 
 	/**
 	 * @param inputCoins
-	 * @return List<Double> : return a list of distinct monnaie type
+	 * @return List of Double : return a list of distinct monnaie type
 	 */
 	public static List<Double> getTypeMonnaie(List<Double> inputCoins) {
 		List<Double> listTypeMonnaie = new ArrayList<Double>();
@@ -177,7 +179,7 @@ public class Solution {
 	/**
 	 * @param inputCoins
 	 * @param montantAchat
-	 * @return List<Double> : return coins if all is ok, null if not
+	 * @return List of Double : return coins if all is ok, null if not
 	 */
 	public static List<Double> renduMonnnaie(List<Double> inputCoins, double montantAchat) {
 
@@ -257,8 +259,18 @@ public class Solution {
 	}
 
 	public static void main(String[] args) throws IOException {
+		Solution.initStockCoins();
+		List<Double> 	inputCoin 		= new ArrayList<Double>();
+		List<Double> 	returnCoins 	= new ArrayList<Double>();
+		
+		//TODO : remplire le montant de l'achat ainsi que la liste des pieces inseré
+		double 			montantAchat 	= 1.20;
+		inputCoin.add(2.0);
 
-
+		System.out.println(
+				"Montant de l'achat : " + montantAchat + "CHF, Montant inséré " + getSomme(inputCoin) + "CHF");
+		returnCoins = renduMonnnaie(inputCoin, montantAchat);
+		System.out.println("Monnaie rendu :"+ getSomme(returnCoins)+"CHF");
 	}
 
 }
