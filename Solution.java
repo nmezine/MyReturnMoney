@@ -9,21 +9,17 @@ import java.util.Map;
 public class Solution {
 
 	public static Map<Double, Integer> StockPieces;
-
 	public static List<Double> rendus;
+	public static List<Double> expectedPiece;
 
+	
 	public static void initStockePieces() {
-
+		expectedPiece = initExpectedPieceType();
 		StockPieces = new HashMap<Double, Integer>();
 
-		getStockPieces().put(5.0, 0);
-		getStockPieces().put(2.0, 0);
-		getStockPieces().put(1.0, 0);
-		getStockPieces().put(0.5, 0);
-		getStockPieces().put(0.2, 0);
-		getStockPieces().put(0.1, 0);
-		getStockPieces().put(0.05, 0);
-
+		for (double typePiece : expectedPiece) {
+			getStockPieces().put(typePiece, 0);
+		}
 	}
 
 	public static Map<Double, Integer> getStockPieces() {
@@ -59,7 +55,7 @@ public class Solution {
 	}
 
 	public static int addInStock(List<Double> inputPieces) {
-		int newStock;
+		int newStock = 0;
 
 		for (double piece : getTypeMonnaie(inputPieces)) {
 			int nbPieceOfThisType = getNbPieceOfType(inputPieces, piece);
@@ -97,16 +93,44 @@ public class Solution {
 		}
 		return round(somme, 2);
 	}
+	
+	public static List<Double> initExpectedPieceType()
+	{
+		expectedPiece = new ArrayList<Double>();
+		expectedPiece.add(5.0);
+		expectedPiece.add(2.0);
+		expectedPiece.add(1.0);
+		expectedPiece.add(0.5);
+		expectedPiece.add(0.2);
+		expectedPiece.add(0.1);
+		expectedPiece.add(0.05);
+		
+		return expectedPiece;
+	}
+	
+	public static boolean isValidPieces(List<Double> inputPieces) {
+		
+		for(double piece : inputPieces) {
+			if(!expectedPiece.contains(piece)) {
+				System.out.println("Merci d'inserer seulement les piéces accepter par la machine");
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public static List<Double> renduMonnnaie(List<Double> inputPieces, double montantAchat) {
-		double montantInput = getSomme(inputPieces);
-
-		if (montantInput < montantAchat) {
-			System.out.println("Montant inséré insuffisant");
-			return null;
-		} else {
-			if (addInStock(inputPieces) != -1) {
-				return helper(montantAchat, inputPieces);
+		
+		if(isValidPieces(inputPieces)) {
+			double montantInput = getSomme(inputPieces);
+	
+			if (montantInput < montantAchat) {
+				System.out.println("Montant inséré insuffisant");
+				return null;
+			} else {
+				if (addInStock(inputPieces) != -1) {
+					return helper(montantAchat, inputPieces);
+				}
 			}
 		}
 		return null;
@@ -145,11 +169,12 @@ public class Solution {
 				aRendre = getRest(typePiece, aRendre);
 				}
 			}
-				
+			
 			if (aRendre > 0) {
 				System.out.println("La machine n'a pas assez de monnaie");
-				removeInStock(inputPieces);
-				rendus = inputPieces;
+				addInStock(rendus);//je remet en stock les pieces que je voulais lui rendre
+				removeInStock(inputPieces); //j'enleve du stocks les pieces qu'il ma donner
+				rendus = inputPieces; //je rend les pieces qu'il ma donner
 			}
 
 
@@ -167,15 +192,15 @@ public class Solution {
 		 * Exemple 1: Montant inséré insuffisant
 		 */
 		
-		inputPiece.add(0.10);
-		montantAchat = 0.80;
-		System.out.println(renduMonnnaie(inputPiece, montantAchat));
+		//inputPiece.add(0.10);
+		//montantAchat = 0.80;
+		//System.out.println(renduMonnnaie(inputPiece, montantAchat));
 
 		/**
 		 * Exemple 2: Machine n'ayan pas assez de monnaie
 		 */
 		inputPiece.clear();
-		inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);
+		inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(0.30);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);
 		inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);inputPiece.add(1.0);
 		montantAchat = 1.30;
 		System.out.println(
@@ -186,13 +211,13 @@ public class Solution {
 		/**
 		 * Exemple 3: Montant Ok, rendu monnaie Ok
 		 */
-		inputPiece.clear();
-		inputPiece.add(5.0);
-		montantAchat = 1.10;
-		System.out.println(
-				"Montant de l'achat : " + montantAchat + "CHF, Montant inséré " + getSomme(inputPiece) + "CHF");
-		System.out.println("Rendu en piéce de monnaies : "
-				+ renduMonnnaie(inputPiece, montantAchat));
+		//inputPiece.clear();
+		//inputPiece.add(5.0);
+		//montantAchat = 1.10;
+		//System.out.println(
+		//		"Montant de l'achat : " + montantAchat + "CHF, Montant inséré " + getSomme(inputPiece) + "CHF");
+		//System.out.println("Rendu en piéce de monnaies : "
+		//		+ renduMonnnaie(inputPiece, montantAchat));
 
 	}
 
