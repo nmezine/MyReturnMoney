@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 /**
  * 
  */
@@ -51,7 +52,7 @@ public class Solution {
 	 */
 	public static void initStockCoins() {
 		expectedCoin = initExpectedCoinType();
-		StockCoins = new HashMap<Double, Integer>();
+		StockCoins = new TreeMap<Double, Integer>();
 
 		for (double typeCoin : expectedCoin) {
 			getStockCoins().put(typeCoin, 15);
